@@ -1,40 +1,36 @@
-import { View, Text, Image, ScrollView, TextInput, Button } from "react-native";
+import { View, Text, TextInput, Image, ScrollView } from "react-native";
 import { useState } from "react";
 import estilos from "./estilos";
 import { libros } from "./libros";
 
-export default function Inicio({ navigation, favoritos, setFavoritos }) {
+export default function Buscar() {
 
-  {/* Almacen del texto digitado del usaurio y actualizacion de texto */}
   const [busqueda, setBusqueda] = useState("");
 
-  {/* revisa los libros y muestra los que coinciden */}
   const resultados = libros.filter(libro =>
     libro.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
-
   return (
     <View style={estilos.container}>
-      {/* Barra de búsqueda */}
       <TextInput
-        placeholder="Buscar libro"
+        placeholder="Buscar libro..."
         value={busqueda}
         onChangeText={setBusqueda}
-        style={{ borderWidth: 1, margin: 15, padding: 10, borderRadius: 8, backgroundColor: "white"}}/>
+        style={{ borderWidth:1, margin:20, padding:10, borderRadius:5}}/>
       <ScrollView>
         {busqueda !== "" && resultados.length === 0 && (
           <View style={estilos.card}>
-            <Text style={{fontSize:18}}>Libro no disponible</Text>
+            <Text style={{fontSize:18}}>Libro no disponible en la biblioteca</Text>
           </View>
         )}
-        {(busqueda === "" ? libros : resultados).map((libro, index) => (
+        {resultados.map((libro, index) => (
+
           <View key={index} style={estilos.card}>
             <View style={estilos.textoContainer}>
-              <Text style={estilos.libroTitulo}>Libro destacado</Text>
+              <Text style={estilos.libroTitulo}>Resultado</Text>
               <Text style={estilos.libroNombre}>{libro.nombre}</Text>
               <Text style={estilos.autor}>{libro.autor}</Text>
               <Text style={estilos.texto}>{libro.texto}</Text>
-              <Button title="Agregar a favoritos" onPress={() => setFavoritos([...favoritos, libro])}/>
             </View>
             <Image
               style={estilos.imagen}

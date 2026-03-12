@@ -1,22 +1,32 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import pe from './pe';
-import det from './det';
-import inic from './inic';
-import vista from './vista';
-import estilos from "./estilos";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useState } from "react";
 
-const Stack = createNativeStackNavigator();
+import Inicio from './inic';
+import Favoritos from './Favs';
+import Perfil from './Perfil';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
+
+  const [favoritos, setFavoritos] = useState([]);
+
   return (
     <NavigationContainer>
-        <Stack.Navigator>
-        <Stack.Screen name="Inicio" component={inic} options={{title:"" , headerLeft:()=> null}} />
-        <Stack.Screen name="Vista" component={vista} options={{headerLeft:()=> null}} />
-        <Stack.Screen name="Perfil" component={pe} />
-        <Stack.Screen name="Detalle" component={det} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+
+        <Tab.Screen name="Inicio">
+          {() => <Inicio favoritos={favoritos} setFavoritos={setFavoritos} />}
+        </Tab.Screen>
+
+        <Tab.Screen name="Favoritos">
+          {() => <Favoritos favoritos={favoritos} />}
+        </Tab.Screen>
+
+        <Tab.Screen name="Perfil" component={Perfil} />
+
+      </Tab.Navigator>
     </NavigationContainer>
   );
-} 
+}
