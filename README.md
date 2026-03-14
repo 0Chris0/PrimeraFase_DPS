@@ -1,4 +1,4 @@
-# PrimeraFase_DPS
+# Primera Fase del proyecto de catedra de la materia de -- Diseño y Programacion de Software Multiplataforma DPS -- 
 
 # Nombre del proyecto
 
