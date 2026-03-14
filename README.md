@@ -1,17 +1,20 @@
 # PrimeraFase_DPS
 
-Descripción breve de la aplicación.
+# Nombre del proyecto
 
-Tecnologías utilizadas.
 
-Instrucciones de instalación y ejecución.
+# Descripción breve de la aplicación
 
-Integrantes del equipo.
 
-1- 
-2-
-3- Christian Augusto Maravilla Melendez - MM250405 -
-4-
-5-
+# Tecnologías utilizadas
 
-Nombre del proyecto.
+# Instrucciones de instalación y ejecución
+
+
+# Integrantes del equipo
+
+1.
+2.
+3. Christian Augusto Maravilla Melendez - MM250405
+4.
+5.
