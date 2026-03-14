@@ -1,32 +1,36 @@
 import { View, Text, Image, ScrollView, TextInput, Button } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import estilos from "./estilos";
-import { libros } from "./libros";
 
 export default function Inicio({ navigation, favoritos, setFavoritos }) {
 
-  {/* Almacen del texto digitado del usaurio y actualizacion de texto */}
   const [busqueda, setBusqueda] = useState("");
+  const [libros, setLibros] = useState([]);
 
-  {/* revisa los libros y muestra los que coinciden */}
-  const resultados = libros.filter(libro =>
-    libro.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  useEffect(() => {
+    const url = "http://10.0.2.2:3000/libros";//IP del emulador NO LO BORREN
 
+    fetch(url)
+      .then(respuesta => respuesta.json())
+      .then(data => setLibros(data))
+      .catch(error => console.log("Error al traer libros:", error));
+      }, []);
+
+        const resultados = libros.filter(libro =>
+        libro.nombre.toLowerCase().includes(busqueda.toLowerCase())
+        );
   return (
     <View style={estilos.container}>
-      {/* Barra de búsqueda */}
-      <TextInput
-        placeholder="Buscar libro"
-        value={busqueda}
-        onChangeText={setBusqueda}
+      <TextInput placeholder="Buscar libro" value={busqueda} onChangeText={setBusqueda}
         style={{ borderWidth: 1, margin: 15, padding: 10, borderRadius: 8, backgroundColor: "white"}}/>
+      <Text>Libros cargados: {libros.length}</Text>
+
       <ScrollView>
         {busqueda !== "" && resultados.length === 0 && (
           <View style={estilos.card}>
             <Text style={{fontSize:18}}>Libro no disponible</Text>
-          </View>
-        )}
+          </View>)}
+
         {(busqueda === "" ? libros : resultados).map((libro, index) => (
           <View key={index} style={estilos.card}>
             <View style={estilos.textoContainer}>
@@ -34,12 +38,10 @@ export default function Inicio({ navigation, favoritos, setFavoritos }) {
               <Text style={estilos.libroNombre}>{libro.nombre}</Text>
               <Text style={estilos.autor}>{libro.autor}</Text>
               <Text style={estilos.texto}>{libro.texto}</Text>
+
               <Button title="Agregar a favoritos" onPress={() => setFavoritos([...favoritos, libro])}/>
             </View>
-            <Image
-              style={estilos.imagen}
-              source={{ uri: libro.imagen }}
-            />
+            <Image style={estilos.imagen} source={{ uri: libro.imagen }}/>
           </View>
         ))}
       </ScrollView>

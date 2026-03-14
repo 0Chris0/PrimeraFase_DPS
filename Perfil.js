@@ -12,18 +12,25 @@ export default function Perfil() {
   const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|outlook|yahoo)\.com$/;
   return regex.test(email);
 };
+
   const registrar = () => {
-    if (nombre === "" || correo === "") {
-      setError("Complete todos los campos");
-      return;
-    }
-    if (!validarCorreo(correo)) {
-      setError("Correo no válido");
-      return;
-    }
-    setError("");
-    setRegistrado(true);
-  };
+
+fetch("http://localhost:3000/registro", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    nombre,
+    correo
+  })
+})
+.then(res => res.json())
+.then(data => {
+  setRegistrado(true);
+});
+};
+
   return (
     <View style={{flex:1, justifyContent:"center", alignItems:"center", padding:20}}>
       {!registrado ? (
