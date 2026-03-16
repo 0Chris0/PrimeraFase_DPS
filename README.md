@@ -28,7 +28,7 @@ npm install
 4. Instalar dependencias necesarias para la navegación
 npx expo install react-native-screens react-native-safe-area-context @react-navigation/native @react-navigation/bottom-tabs
 
-Nota: Se recomienda utilizar **dos terminales**, una para ejecutar la API local y otra para ejecutar la aplicación móvil, ya que ambas deben funcionar al mismo tiempo.
+Nota: Le recomiendo usar dos terminales una para iniciar la API local y otra para iniciar la aplicación, ambas deben funcionar al mismo tiempo o tirara error.
 
 5. Instalar dependencias de la API local
 cd api-libros
