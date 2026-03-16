@@ -1,4 +1,4 @@
-# Primera Fase del proyecto de catedra -DPS-
+## Primera Fase del proyecto de catedra -DPS-
 
 # Nombre del proyecto
 Sistema de Gestión de Biblioteca "Legado Literario"
