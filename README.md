@@ -16,31 +16,31 @@ El sistema permite a los usuarios registrarse, iniciar sesión y visualizar los 
 - Android Studio (emulador para pruebas en Android)
 
 # Instrucciones de instalación y ejecución
-1. Clonar el repositorio
+1. Clonar el repositorio:
 git clone https://github.com/usuario/repositorio.git
 
-2. Entrar a la carpeta del proyecto
+2. Entrar a la carpeta del proyecto:
 cd "nombre proyecto" - cd PrimeraFase_DPS
 
-3. Instalar dependencias de la aplicación
+3. Instalar dependencias de la aplicación:
 npm install
 
-4. Instalar dependencias necesarias para la navegación
+4. Instalar dependencias necesarias para la navegación:
 npx expo install react-native-screens react-native-safe-area-context @react-navigation/native @react-navigation/bottom-tabs
 
 Nota: Le recomiendo usar dos terminales una para iniciar la API local y otra para iniciar la aplicación, ambas deben funcionar al mismo tiempo o tirara error.
 
-5. Instalar dependencias de la API local
+5. Instalar dependencias de la API local:
 cd api-libros
 npm install
 
-6. Ejecutar la API local
+6. Ejecutar la API local:
 node "nombre".js - node server.js
 
-7. En otra terminal, entrar a la carpeta principal del proyecto
+7. En otra terminal, entrar a la carpeta principal del proyecto:
 cd "nombre proyecto" - cd PrimeraFase_DPS
 
-8. Ejecutar la aplicación
+8. Ejecutar la aplicación:
 npx expo start
 
 # Integrantes del equipo
