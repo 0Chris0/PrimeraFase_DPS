@@ -1,7 +1,7 @@
 # Primera Fase del proyecto de catedra -DPS-
 
 # Nombre del proyecto
-# Sistema de Gestión de Biblioteca "Legado Literario"
+Sistema de Gestión de Biblioteca "Legado Literario"
 
 # Descripción breve de la aplicación
 Sistema móvil diseñado para la gestión y consulta de libros dentro de una biblioteca. Su objetivo es facilitar a los usuarios el acceso a la información del catálogo de libros mediante una interfaz sencilla.
