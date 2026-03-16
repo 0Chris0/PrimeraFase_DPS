@@ -37,7 +37,7 @@ npm install
 6. Ejecutar la API local:
 node "nombre".js - node server.js
 
-7. En otra terminal, entrar a la carpeta principal del proyecto:
+7. En otra terminal entrar a la carpeta principal del proyecto:
 cd "nombre proyecto" - cd PrimeraFase_DPS
 
 8. Ejecutar la aplicación:
