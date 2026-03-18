@@ -51,5 +51,5 @@ npx expo start
 4. Enrique Alexander Solano López - SL223188 -
 5. Valeria Alexandra Cárcamo - Cl200538 -
 
-#Diseño de mockups 
+## Diseño de mockups 
 https://www.figma.com/proto/Z11LntemVeLRPzGQ1VdChN/Untitled?node-id=2008-11&scaling=contain&content-scaling=fixed&t=2FEz6cppHL5G3F8d-1
