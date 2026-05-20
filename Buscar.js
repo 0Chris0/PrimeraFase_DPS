@@ -1,59 +1,79 @@
-import { View, Text, TextInput, Image, ScrollView, ActivityIndicator, TouchableOpacity, Button, SafeAreaView, Keyboard } from "react-native";
-import { useState, useEffect } from "react";
-import estilos from "./estilos"; 
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  TouchableOpacity,
+  SafeAreaView,
+  Keyboard,
+  ImageBackground,
+  StatusBar,
+} from "react-native";
 
-export default function Buscar({ navigation, route }) {
-  const [textoBusqueda, setTextoBusqueda] = useState(""); 
+import { useState, useEffect } from "react";
+import { Ionicons } from "@expo/vector-icons";
+
+export default function Buscar({ navigation }) {
+  const [textoBusqueda, setTextoBusqueda] = useState("");
   const [libros, setLibros] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
   const [generos, setGeneros] = useState([]);
-  const [autores, setAutores] = useState([]);
-  const [filtro, setFiltro] = useState(false); 
-  const PantallaBusqueda = route.name === "BuscarLibros"; 
-  const API_KEY = "AIzaSyDOVKUZWIfcvc2xqBixFJ0uh_OvkSiFcco"; //Este es el codigo de para que la API funcione 
+  const [filtro, setFiltro] = useState(false);
+
+  const API_KEY = "AIzaSyDOVKUZWIfcvc2xqBixFJ0uh_OvkSiFcco";
 
   useEffect(() => {
     fetchLibros("Libros recomendados", "", true);
   }, []);
 
   useEffect(() => {
-    // Esto es para cuando borramos la busqueda nos manda a la pantalla de inicio sin hacer tab en regresar
     if (textoBusqueda.trim() === "" && filtro) {
       resetearBusqueda();
       return;
     }
-    //El DelayDebounceFn es para que la API no se sobrecargue cuando se hace una peticion nueva 
+
     if (textoBusqueda.trim().length > 0) {
       const delayDebounceFn = setTimeout(() => {
         fetchLibros(textoBusqueda);
-      }, 300); //Este es el tiempo que tarda en hacer la peticion
+      }, 300);
+
       return () => clearTimeout(delayDebounceFn);
     }
   }, [textoBusqueda]);
 
   const fetchLibros = async (query, tipo = "", Inic = false) => {
     if (!query.trim()) return;
+
     setCargando(true);
     setError(null);
+
     if (!Inic) {
-      setFiltro(true); 
+      setFiltro(true);
     }
+
     try {
       let q = tipo ? `${tipo}:"${query}"` : query;
+
       let url = `https://www.googleapis.com/books/v1/volumes?q=${q}&key=${API_KEY}&maxResults=20`;
-      
+
       let response = await fetch(url);
+
       let data = await response.json();
 
       if (data.items) {
         setLibros(data.items);
-        
+
         if (Inic) {
-          const gens = [...new Set(data.items.flatMap(item => item.volumeInfo.categories || []))].slice(0, 10);
-          const auts = [...new Set(data.items.flatMap(item => item.volumeInfo.authors || []))].slice(0, 10);
+          const gens = [
+            ...new Set(
+              data.items.flatMap((item) => item.volumeInfo.categories || []),
+            ),
+          ].slice(0, 10);
+
           setGeneros(gens);
-          setAutores(auts);
         }
       } else {
         setLibros([]);
@@ -66,94 +86,438 @@ export default function Buscar({ navigation, route }) {
   };
 
   const resetearBusqueda = () => {
-    setFiltro(false); 
+    setFiltro(false);
     setTextoBusqueda("");
+
     fetchLibros("Libros recomendados", "", true);
-    Keyboard.dismiss(); 
+
+    Keyboard.dismiss();
   };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 10 }}>
-        
-        <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 35 }}>Legado Literario</Text>
+      <StatusBar barStyle="light-content" />
 
-        {PantallaBusqueda && (
-          <View style={{ marginVertical: 10 }}>
-            <TextInput
-              placeholder="Escribe aquí..."
-              value={textoBusqueda}
-              onChangeText={setTextoBusqueda}
-              style={{ borderWidth: 1, padding: 10, backgroundColor: 'white' }}
+      {/* FONDO */}
+      <ImageBackground
+        source={require("./assets/carta.png")}
+        resizeMode="cover"
+        style={{ flex: 1 }}
+      >
+        {/* HEADER */}
+        <ImageBackground
+          source={require("./assets/fondo.png")}
+          resizeMode="cover"
+          style={{
+            width: "108%",
+            alignSelf: "center",
+
+            paddingTop: 12,
+            paddingBottom: 10,
+            paddingHorizontal: 14,
+
+            overflow: "hidden",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                color: "#C89B2D",
+                fontSize: 32,
+                fontWeight: "bold",
+
+                flex: 1,
+                textAlign: "center",
+
+                marginLeft: 35,
+              }}
+            >
+              Legado Literario
+            </Text>
+
+            <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
+              <Ionicons name="person-circle" size={42} color="#F4E7C8" />
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+
+        {/* CONTENIDO */}
+        <View
+          style={{
+            flex: 1,
+            paddingHorizontal: 14,
+          }}
+        >
+          {/* BUSCADOR */}
+          <View
+            style={{
+              marginBottom: 18,
+              marginTop: 28,
+            }}
+          >
+            <View
+              style={{
+                height: 55,
+
+                backgroundColor: "#F7EBD7",
+
+                borderWidth: 2.5,
+                borderColor: "#C79B2D",
+
+                borderRadius: 14,
+
+                flexDirection: "row",
+                alignItems: "center",
+
+                paddingHorizontal: 14,
+              }}
+            >
+              <Ionicons
+                name="search"
+                size={24}
+                color="#C79B2D"
+                style={{
+                  marginRight: 8,
+                }}
+              />
+
+              <TextInput
+                placeholder="Buscar libros..."
+                placeholderTextColor="#8C7A63"
+                value={textoBusqueda}
+                onChangeText={setTextoBusqueda}
+                style={{
+                  flex: 1,
+                  fontSize: 16,
+                  color: "#4A3524",
+                  height: 50,
+                }}
+              />
+            </View>
+          </View>
+
+          {/* BOTON REGRESAR */}
+          {filtro && (
+            <TouchableOpacity
+              onPress={resetearBusqueda}
+              style={{
+                marginBottom: 15,
+                backgroundColor: "#857020",
+                borderWidth: 2,
+                borderColor: "#D4B24A",
+                borderRadius: 12,
+                paddingVertical: 10,
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{
+                  color: "#fff",
+                  fontWeight: "bold",
+                }}
+              >
+                ← REGRESAR AL INICIO
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {/* GENEROS */}
+          {!filtro && textoBusqueda === "" && (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingRight: 20,
+                paddingLeft: 5,
+              }}
+              style={{
+                marginBottom: 16,
+                // IMPORTANTE
+                height: 60,
+              }}
+            >
+              {generos.map((g, i) => (
+                <TouchableOpacity
+                  key={`gen-${i}`}
+                  onPress={() => fetchLibros(g, "subject")}
+                  style={{
+                    marginRight: 12,
+                  }}
+                >
+                  <ImageBackground
+                    source={require("./assets/Generos.png")}
+                    resizeMode="stretch"
+                    imageStyle={{
+                      // IMPORTANTE
+                      borderRadius: 8,
+                    }}
+                    style={{
+                      // ESTO EVITA QUE SE CORTE
+                      alignSelf: "flex-start",
+
+                      // CRECE SEGUN EL TEXTO
+                      paddingHorizontal: 16,
+
+                      // MAS ALTO
+                      height: 45,
+
+                      // TAMAÑO MINIMO
+                      minWidth: 70,
+
+                      justifyContent: "center",
+                      alignItems: "center",
+
+                      overflow: "visible",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#F4E8D0",
+
+                        fontWeight: "bold",
+
+                        fontSize: 14,
+
+                        textAlign: "center",
+                        paddingHorizontal: 10,
+                      }}
+                    >
+                      {g}
+                    </Text>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+          {/* LINEA DECORATIVA */}
+          <View
+            style={{
+              alignItems: "center",
+              marginBottom: 18,
+              marginTop: 4,
+            }}
+          >
+            <View
+              style={{
+                width: "92%",
+                height: 3,
+
+                backgroundColor: "#C79B2D",
+
+                borderRadius: 20,
+              }}
+            />
+
+            <Ionicons
+              name="diamond"
+              size={14}
+              color="#C79B2D"
+              style={{
+                position: "absolute",
+                top: -5,
+                backgroundColor: "#EFE2CF",
+                paddingHorizontal: 4,
+              }}
             />
           </View>
-        )}
 
-        {/*Este es el boton de regresar si hay algo en el cuadro de busqueda*/}
-        {filtro && (
-          <TouchableOpacity 
-            onPress={resetearBusqueda} 
-            style={{ marginBottom: 10, padding: 10, backgroundColor: '#ddd', borderRadius: 5 }}
-          >
-            <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>← REGRESAR AL INICIO</Text>
-          </TouchableOpacity>
-        )}
+          {/* CARGANDO */}
+          {cargando && (
+            <ActivityIndicator
+              size="small"
+              color="#857020"
+              style={{
+                marginVertical: 10,
+              }}
+            />
+          )}
 
-        {/*Se muestran los autores y generos si no hay nada en el cuadro de busqueda*/}
-        {!filtro && textoBusqueda === "" && (
-          <View style={{ marginVertical: 10 }}>
-            <Text style={{fontWeight: 'bold'}}>Géneros:</Text>
-            <ScrollView horizontal style={{ marginBottom: 10 }}>
-              {generos.map((g, i) => (
-                <TouchableOpacity 
-                  key={`gen-${i}`} 
-                  onPress={() => fetchLibros(g, "subject")} 
-                  style={{ marginRight: 10, padding: 5, backgroundColor: '#f0f0f0', borderWidth: 1 }}>
-                  <Text>{g}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-
-            <Text style={{fontWeight: 'bold'}}>Autores:</Text>
-            <ScrollView horizontal>
-              {autores.map((a, i) => (
-                <TouchableOpacity 
-                  key={`aut-${i}`} 
-                  onPress={() => fetchLibros(a, "inauthor")} 
-                  style={{ marginRight: 10, padding: 5, backgroundColor: '#f0f0f0', borderWidth: 1 }}>
-                  <Text>{a}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        )}
-
-        {cargando && <ActivityIndicator size="small" color="#000" style={{ marginVertical: 5 }} />}
-
-        <ScrollView keyboardShouldPersistTaps="handled">
-          {libros.map((item, index) => (
-            <TouchableOpacity 
-              key={item.id || `libro-${index}`} 
-              onPress={() => navigation.navigate('Detalle', { libro: item })}
+          {/* ERROR */}
+          {error && (
+            <Text
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginBottom: 10,
+              }}
             >
-              <View style={estilos.card}>
-                <View style={estilos.textoContainer}>
-                  <Text style={{fontWeight: 'bold'}}>{item.volumeInfo.title}</Text>
-                  <Text style={{ fontSize: 12, color: 'gray' }}>
-                    {item.volumeInfo.authors?.join(", ") || "Autor desconocido"}
-                  </Text>
-                </View>
-                {item.volumeInfo.imageLinks?.thumbnail && (
-                  <Image 
-                    style={estilos.imagen} 
-                    source={{ uri: item.volumeInfo.imageLinks.thumbnail.replace("http://", "https://") }} 
+              {error}
+            </Text>
+          )}
+
+          {/* LIBROS */}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{
+              paddingTop: 8,
+              paddingBottom: 30,
+            }}
+          >
+            {libros.map((item, index) => (
+              <TouchableOpacity
+                key={item.id || `libro-${index}`}
+                activeOpacity={0.9}
+                onPress={() =>
+                  navigation.navigate("Detalle", {
+                    libro: item,
+                  })
+                }
+              >
+                <ImageBackground
+                  source={require("./assets/cuadroLibro.png")}
+                  resizeMode="stretch"
+                  style={{
+                    width: "100%",
+                    alignSelf: "center",
+
+                    minHeight: 122,
+
+                    paddingVertical: 12,
+                    paddingHorizontal: 6,
+
+                    marginBottom: 18,
+
+                    flexDirection: "row",
+                    alignItems: "flex-start",
+
+                    position: "relative",
+                  }}
+                >
+                  {/* CORAZON */}
+                  <Ionicons
+                    name="heart"
+                    size={26}
+                    color="#8E8924"
+                    style={{
+                      position: "absolute",
+
+                      top: 15,
+                      right: 26,
+                    }}
                   />
-                )}
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+
+                  {/* IMAGEN */}
+                  {item.volumeInfo.imageLinks?.thumbnail && (
+                    <View
+                      style={{
+                        width: 60,
+                        height: 85,
+
+                        borderWidth: 1.5,
+                        borderColor: "#8A6A16",
+
+                        overflow: "hidden",
+
+                        marginRight: 12,
+                        marginLeft: 7,
+
+                        marginTop: 7,
+                      }}
+                    >
+                      <Image
+                        source={{
+                          uri: item.volumeInfo.imageLinks.thumbnail.replace(
+                            "http://",
+                            "https://",
+                          ),
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        resizeMode="cover"
+                      />
+                    </View>
+                  )}
+
+                  {/* INFO */}
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      paddingRight: 68,
+                    }}
+                  >
+                    {/* TITULO */}
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        color: "#C79B2D",
+
+                        fontSize: 15,
+
+                        fontWeight: "bold",
+
+                        lineHeight: 20,
+                      }}
+                    >
+                      {item.volumeInfo.title}
+                    </Text>
+
+                    {/* AUTOR */}
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        color: "#3D2F22",
+
+                        fontSize: 12,
+
+                        marginTop: 5,
+
+                        marginBottom: 14,
+
+                        lineHeight: 16,
+                      }}
+                    >
+                      {item.volumeInfo.authors?.join(", ") ||
+                        "Autor desconocido"}
+                    </Text>
+                  </View>
+
+                  {/* BOTON */}
+                  <View
+                    style={{
+                      position: "absolute",
+
+                      right: 26,
+                      bottom: 18,
+
+                      backgroundColor: "#857020",
+
+                      borderWidth: 2,
+                      borderColor: "#D6B54B",
+
+                      borderRadius: 10,
+
+                      paddingVertical: 6,
+                      paddingHorizontal: 14,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "#F5E8D0",
+
+                        fontWeight: "bold",
+
+                        fontSize: 11,
+                      }}
+                    >
+                      Ver Más
+                    </Text>
+                  </View>
+                </ImageBackground>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </ImageBackground>
     </SafeAreaView>
   );
 }
