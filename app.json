@@ -6,14 +6,17 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+
     "ios": {
       "supportsTablet": true
     },
+
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -21,13 +24,30 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
+
       "package": "com.anonymous.App"
     },
+
     "web": {
       "favicon": "./assets/favicon.png"
     },
+
     "plugins": [
-      "expo-font"
+
+      "expo-font",
+
+      "expo-secure-store",
+
+      "expo-web-browser",
+
+      [
+        "expo-camera",
+        {
+          "cameraPermission":
+            "Esta app necesita acceso a la cámara para tomar tu foto de perfil."
+        }
+      ]
+
     ]
   }
 }
